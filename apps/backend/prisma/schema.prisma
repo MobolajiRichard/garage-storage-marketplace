@@ -1,0 +1,241 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String         @id @default(cuid())
+  email                 String         @unique
+  name                  String?
+  password              String?
+  hostProfile           HostProfile?
+  receivedMessages      ChatMessage[]  @relation("MessageReceiver")
+  sentMessages          ChatMessage[]  @relation("MessageSender")
+  pushNotificationToken String?
+  savedSpaces           SavedSpaces[]
+  profileImage          String?
+  language              String?
+  authProvider          AuthProvider   @default(EMAIL)
+  emailVerified         Boolean        @default(false)
+  phoneVerified         Boolean        @default(false)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  isActive              Boolean        @default(true)
+  bookings              Booking[]
+  SpaceReview           SpaceReview[]
+  Notification          Notification[]
+  Payment               Payment[]
+
+  @@index([email])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+model HostProfile {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio         String?
+  isActive    Boolean   @default(true)
+  rating      Float?
+  ratingCount Int       @default(0)
+  spaces      Space[]
+  Booking     Booking[]
+  Payment     Payment[]
+}
+
+model Space {
+  id          String        @id @default(cuid())
+  hostId      String
+  host        HostProfile   @relation(fields: [hostId], references: [id])
+  title       String
+  description String
+  price       Float?
+  rating      Float?
+  ratingCount Int           @default(0)
+  isBooked    Boolean       @default(true)
+  isDeleted   Boolean       @default(false)
+  reviews     SpaceReview[]
+  bookings    Booking[]
+  currency    String?       @default("USD")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ChatMessage ChatMessage[]
+  SavedSpaces SavedSpaces[]
+
+  @@index([hostId])
+}
+
+model Booking {
+  id String @id @default(cuid())
+
+  spaceId String
+  space   Space  @relation(fields: [spaceId], references: [id])
+
+  hostId String
+  host   HostProfile @relation(fields: [hostId], references: [id])
+
+  customerId String
+  customer   User   @relation(fields: [customerId], references: [id])
+
+  status      BookingStatus       @default(PENDING)
+  paymentType BookingPaymentType?
+
+  startAt DateTime
+  endAt   DateTime
+
+  price    Float?
+  currency String? @default("USD")
+
+  chatMessageId String      @unique
+  chatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
+
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  closed Boolean @default(false)
+
+  @@index([spaceId])
+  @@index([hostId])
+}
+
+model SpaceReview {
+  id String @id @default(cuid())
+
+  spaceId String
+  space   Space  @relation(fields: [spaceId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  rating Int
+  review String
+
+  price    Float?
+  currency String? @default("USD")
+  isPaid   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  content   String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String
+  receiverId  String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  attachments String[]
+  metadata    Json?
+  spaceId     String?
+  space       Space?   @relation(fields: [spaceId], references: [id])
+
+  receiver User     @relation("MessageReceiver", fields: [receiverId], references: [id])
+  sender   User     @relation("MessageSender", fields: [senderId], references: [id])
+  Booking  Booking?
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([senderId, receiverId])
+}
+
+model Payment {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  amount   Float
+  currency String        @default("USD")
+  status   PaymentStatus
+
+  hostId String?
+  host   HostProfile? @relation(fields: [hostId], references: [id])
+
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model SavedSpaces {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  spaceId   String?
+  space     Space?   @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, spaceId])
+  @@index([userId])
+  @@index([spaceId])
+}
+
+enum NotificationType {
+  VERIFICATION
+  CHAT
+  PAYMENT
+  SYSTEM
+}
+
+enum BookingStatus {
+  PREVIEW
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum BookingPaymentType {
+  CASH
+  CARD
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  APPLE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
