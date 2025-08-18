@@ -24,3 +24,13 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+
+export const SHADOW_STYLE = {
+  backgroundColor: '#fff',
+  shadowColor: '#0D0D0D',
+  shadowOffset: { width: 0, height: 5 },
+  shadowOpacity: 0.05,
+  shadowRadius: 5,
+  elevation: 5,
+};

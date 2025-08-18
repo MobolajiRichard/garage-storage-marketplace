@@ -1,43 +1,105 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import React, { useCallback } from "react";
+import { Platform, Text } from "react-native";
+import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const renderTabIcon = useCallback(
+    ({ focused, iconType }: { focused: boolean; iconType: string }) => {
+      const color = focused ? "#28287a" : "#959595";
+
+      switch (iconType) {
+        case "explore":
+          return <Ionicons name="search-outline" size={24} color={color} />;
+        case "chats":
+          return (
+            <Ionicons name="chatbubbles-outline" size={24} color={color} />
+          );
+        case "notifications":
+          return <Feather name="bell" size={24} color={color} />;
+        case "profile":
+          return <FontAwesome6 name="circle-user" size={24} color={color} />;
+        default:
+          return null;
+      }
+    },
+    []
+  );
+
+  const renderTabLabel = useCallback(
+    ({ focused, label }: { focused: boolean; label: string }) => {
+      return (
+        <Text
+          
+          className={"text-[12px]  "}
+          style={{ color: focused ? "#28287a" : "#959595" , fontFamily:"Poppins"}}
+        >
+          {label}
+        </Text>
+      );
+    },
+    []
+  );
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        headerShown: true,
+        headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
+        },
+        headerTitleAlign: 'left',
+        headerTitleStyle: {
+          fontSize: 32,
+          fontWeight: '700',
+        },
+        tabBarStyle: {
+          backgroundColor: 'white',
+          paddingBottom: 6,
+          paddingTop: 6,
+          elevation: 0,
+          shadowOpacity: 0,
+          shadowOffset: { width: 0, height: 0 },
+          shadowRadius: 0,
+        }
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Explore",
+          tabBarIcon: ({ focused }) =>
+            renderTabIcon({ focused, iconType: "explore" }),
+            tabBarLabel: ({ focused }) => renderTabLabel({ focused, label: 'Explore' }),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="chats"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Chats",
+          tabBarIcon: ({ focused }) =>
+            renderTabIcon({ focused, iconType: "chats" }),
+            tabBarLabel: ({ focused }) => renderTabLabel({ focused, label: 'Chats' }),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: "Notifications",
+          tabBarIcon: ({ focused }) =>
+            renderTabIcon({ focused, iconType: "notifications" }),
+            tabBarLabel: ({ focused }) => renderTabLabel({ focused, label: 'Notifications' }),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused }) =>
+            renderTabIcon({ focused, iconType: "profile" }),
+            tabBarLabel: ({ focused }) => renderTabLabel({ focused, label: 'Profile' }),
         }}
       />
     </Tabs>

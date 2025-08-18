@@ -1,75 +1,89 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import {
+  Button,
+  CategoryCard,
+  Chip,
+  Container,
+  Input,
+  LocationCard,
+  SpaceCard,
+} from "@/components";
+import { categories } from "@/constants/categories";
+import { locations } from "@/constants/locations";
+import { Image } from "expo-image";
+import { useForm } from "react-hook-form";
+import { FlatList, Text, View } from "react-native";
 
 export default function HomeScreen() {
+  const { control } = useForm({
+    defaultValues: {
+      search: "",
+      aiText: "",
+    },
+  });
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <Container fullScreen scrollable>
+      <View className="flex-1 pt-4 w-full">
+        <Input
+          control={control}
+          name="search"
+          placeholder="Start your search"
+          className="rounded-full"
+          search
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <View className="mt-6">
+          <Text className="mb-4 font-semibold ml-1">Recommended Garagems</Text>
+          <FlatList
+            horizontal
+            data={[1, 2, 3, 4, 5, 6]}
+            keyExtractor={(item) => item.toString()}
+            renderItem={({ item }) => <SpaceCard />}
+            contentContainerStyle={{ gap: 10 }}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        <View className="mt-6">
+          <Text className="mb-4 font-semibold ml-1">Popular Locations</Text>
+          <FlatList
+            horizontal
+            data={locations}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => <LocationCard {...item} />}
+            contentContainerStyle={{ gap: 10 }}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        <View className="mt-6 border border-[#959595] p-6 rounded-[15px]">
+          <View className=" w-[50px] h-[50px] items-center justify-center bg-primary rounded-full">
+            <Text className="font-bold text-white">sAI</Text>
+          </View>
+          <Text className=" my-4">
+            Tell SpaceAI your needs — we’ll match you with the perfect space.
+          </Text>
+          <Input
+            control={control}
+            name="aiText"
+            placeholder="what are you looking for?..."
+            className="rounded-full"
+          />
+          <View className="flex flex-row flex-wrap gap-4 my-4">
+            <Chip onPress={() => {}} text="Garage near my home" />
+            <Chip onPress={() => {}} text="Garage with CCTV" />
+            <Chip onPress={() => {}} text="Show me storage for boxes" />
+          </View>
+          <Button text="Chat With AI" />
+        </View>
+        <View className="mt-6">
+          <Text className="mb-4 font-semibold ml-1">All Categories</Text>
+          <FlatList
+            data={categories}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => <CategoryCard {...item} />}
+            contentContainerStyle={{ gap: 10 }}
+            columnWrapperStyle={{ justifyContent: "center", gap: 10 }}
+            numColumns={2}
+          />
+        </View>
+      </View>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
