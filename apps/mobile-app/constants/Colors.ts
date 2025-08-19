@@ -29,8 +29,8 @@ export const Colors = {
 export const SHADOW_STYLE = {
   backgroundColor: '#fff',
   shadowColor: '#0D0D0D',
-  shadowOffset: { width: 0, height: 5 },
+  shadowOffset: { width: 0, height: 7 },
   shadowOpacity: 0.05,
-  shadowRadius: 5,
+  shadowRadius: 50,
   elevation: 5,
 };

@@ -1,25 +1,34 @@
 import {
-    AntDesign,
+  AntDesign,
   Entypo,
   FontAwesome5,
   Ionicons,
   MaterialIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import { RelativePathString, useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { twMerge } from "tailwind-merge";
 
 export default function SettingsMenu() {
+  const router = useRouter();
+  const handleLogout = () => {};
   return (
-    <View className="mt-4 flex-col divide-y divide-gray-200 bg-white pb-2">
+    <View className="mt-4 flex-col  bg-white pb-2">
       {LINKS().map((item, index) => (
         <Pressable
           key={index}
-          className={twMerge(
-            "flex flex-row items-center justify-between py-4",
-            item.chevrolet && "border-b border-gray-100"
-          )}
+          className={twMerge("flex flex-row items-center justify-between py-6")}
+          onPress={() => {
+            if (item?.logout) {
+              handleLogout();
+            } else if (item.onPress) {
+              item.onPress();
+            } else {
+              router.push((item.path as RelativePathString) || "");
+            }
+          }}
         >
           {item.icon}
           <Text
@@ -46,13 +55,13 @@ export const LINKS = () => [
   {
     icon: <AntDesign name="user" size={24} color="black" />,
     title: "Personal Information",
-    path: "/(tabs)/(profile)/PersonalInformation",
+    path: "/(tabs)/profile/PersonalInformation",
     chevrolet: true,
   },
   {
     icon: <MaterialIcons name="warehouse" size={24} color="black" />,
     title: "My Spaces",
-    path: "/(tabs)/(profile)/MyServices",
+    path: "/(tabs)/(profile)/MySpaces",
     chevrolet: true,
     isWorker: true,
   },
@@ -60,14 +69,14 @@ export const LINKS = () => [
   {
     icon: <MaterialIcons name="security" size={24} color="black" />,
     title: "Security",
-    path: "Security",
+    path: "/(tabs)/(profile)/Security",
     chevrolet: true,
     isEmailProvider: true,
   },
   {
     icon: <Ionicons name="language-outline" size={24} color="black" />,
     title: "Language",
-    path: "Languages",
+    path: "/(tabs)/(profile)/Languages",
     chevrolet: true,
   },
   {

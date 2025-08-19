@@ -47,7 +47,7 @@ const Container = ({
 
   const content = scrollable ? (
     <SafeAreaView
-      className={twMerge('h-full flex-1 bg-white p-4', fullScreen && 'pt-0', className)}
+      className={twMerge('h-full flex-1 bg-white py-4 px-6', fullScreen && 'pt-0', className)}
       edges={fullScreen ? [] : edges}
     >
       <ScrollView
@@ -60,7 +60,7 @@ const Container = ({
     </SafeAreaView>
   ) : (
     <SafeAreaView
-      className={twMerge('h-full flex-1 bg-white p-4', fullScreen && 'pt-0', className)}
+      className={twMerge('h-full flex-1 bg-white py-4 px-6', fullScreen && 'pt-0', className)}
       edges={fullScreen ? [] : edges}
     >
       {children}

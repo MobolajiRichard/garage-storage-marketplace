@@ -31,7 +31,7 @@ export default function HomeScreen() {
           search
         />
         <View className="mt-6">
-          <Text className="mb-4 font-semibold ml-1">Recommended Garagems</Text>
+          <Text className="mb-4 font-semibold ml-1">Recommended Garages</Text>
           <FlatList
             horizontal
             data={[1, 2, 3, 4, 5, 6]}

@@ -21,7 +21,7 @@ const BUTTON_VARIANTS = {
     text: 'text-white',
   },
   secondary: {
-    button: 'bg-gray-400',
+    button: 'bg-white border',
     text: 'text-black',
   },
   link: {

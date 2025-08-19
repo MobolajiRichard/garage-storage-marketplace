@@ -44,7 +44,7 @@ const Input = <T extends FieldValues>({
 
   const inputBackgroundColor = white ? "transparent" : "#FFFFFF";
   const inputTextColor = white ? "#FFFFFF" : "#0D0D0D";
-  const inputBorderColor = error ? "#DC2626" : "#EEEEEE";
+  const inputBorderColor = error ? "#DC2626" : "#d1d5db";
   const iconColor = white ? "#FFFFFF" : "#0D0D0D";
   const placeholderColor = white ? "#FFFFFF" : "#959595";
 

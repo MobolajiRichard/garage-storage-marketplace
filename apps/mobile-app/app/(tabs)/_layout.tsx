@@ -100,6 +100,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) =>
             renderTabIcon({ focused, iconType: "profile" }),
             tabBarLabel: ({ focused }) => renderTabLabel({ focused, label: 'Profile' }),
+            headerShown:false
         }}
       />
     </Tabs>
