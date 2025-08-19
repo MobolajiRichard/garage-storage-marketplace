@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import Input from "../Input";
@@ -9,6 +9,9 @@ import { Checkbox } from "..";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import KeyboardWrapper from "../KeyboardWrapper";
+import Toast from "react-native-toast-message";
+import { registerUser } from "@/queries";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const formSchema = z.object({
   email: z.email("Invalid email address"),
@@ -18,27 +21,65 @@ export const formSchema = z.object({
     .min(6, "Password must be at least 6 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
-  type: z.string().min(1, "Type is required"),
+  accountType: z.string().min(1, "Type is required"),
 });
 
-const RegistrationForm = () => {
+export type RegistrationInput = z.infer<typeof formSchema>;
+
+const RegistrationForm = ({
+  email,
+  onClose,
+}: {
+  email: string;
+  onClose: () => void;
+}) => {
   const [termsAgreed, setTermsAgreed] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const { control, watch, setValue, handleSubmit, formState } = useForm({
     defaultValues: {
       email: "",
       name: "",
       password: "",
-      type: "",
+      accountType: "",
     },
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log({ data });
+  useEffect(() => {
+    if (email) {
+      setValue("email", email);
+    }
+  }, [email]);
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    try {
+      const result = await registerUser({
+        ...data,
+        accountType: data?.accountType?.toLowerCase(),
+      });
+
+      //on successful registration we store the token to sign in the user
+      await AsyncStorage.setItem("accessToken", result.token);
+      Toast.show({
+        type: "success",
+        text1: "Sign Up Succesful!",
+      });
+
+      //close modal
+      onClose();
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Please try again",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
-    <KeyboardWrapper
-    >
+    <KeyboardWrapper>
       <Text className="mb-2 ml-1">Name</Text>
       <Input
         control={control}
@@ -53,6 +94,7 @@ const RegistrationForm = () => {
           name="email"
           placeholder="Email"
           error={formState.errors.email?.message}
+          disabled
         />
       </View>
       <View className="mt-6">
@@ -60,8 +102,8 @@ const RegistrationForm = () => {
         <Select
           name="Account Type"
           options={["Host", "Guest"]}
-          setValue={(value) => setValue("type", value)}
-          value={watch("type")}
+          setValue={(value) => setValue("accountType", value)}
+          value={watch("accountType")}
           firstOptionSelect
         />
       </View>
@@ -86,7 +128,12 @@ const RegistrationForm = () => {
           Payments Terms of Service.
         </Text>
       </View>
-      <Button onPress={handleSubmit(onSubmit)} text="Create Account" />
+      <Button
+        loading={loading}
+        disabled={loading}
+        onPress={handleSubmit(onSubmit)}
+        text="Create Account"
+      />
     </KeyboardWrapper>
   );
 };

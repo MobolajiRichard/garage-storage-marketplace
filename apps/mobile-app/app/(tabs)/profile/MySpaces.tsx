@@ -1,11 +1,8 @@
-import React from 'react'
+import React from "react";
+import { View } from "react-native";
 
 const MySpaces = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <View></View>;
+};
 
-export default MySpaces
+export default MySpaces;

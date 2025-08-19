@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Text, View } from "react-native";
-import Input from "../Input";
-import { useForm } from "react-hook-form";
-import Container from "../Container";
-import Button from "../Button";
-import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import LogInForm from "./LogInForm";
 import RegistrationForm from "./RegistrationForm";
 
-const AuthForm = () => {
+const AuthForm = ({ onClose }: { onClose: () => void }) => {
   const [step, setStep] = useState(0);
-  const { control } = useForm({
-    defaultValues: {
-      email: "",
-    },
-  });
+  const [email, setEmail] = useState("");
+
   return (
     <KeyboardAvoidingView>
       <View className="h-full">
@@ -23,8 +15,10 @@ const AuthForm = () => {
             {step === 0 ? "Log In or Sign Up" : "Complete Registration"}
           </Text>
         </View>
-        {step === 0 && <LogInForm onNext={() => setStep(1)}/>}
-        {step === 1 && <RegistrationForm />}
+        {step === 0 && (
+          <LogInForm onClose={onClose} onNext={() => setStep(1)} setEmail={setEmail} />
+        )}
+        {step === 1 && <RegistrationForm email={email}  onClose={onClose}  />}
       </View>
     </KeyboardAvoidingView>
   );

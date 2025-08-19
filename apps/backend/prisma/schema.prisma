@@ -36,6 +36,8 @@ model User {
   SpaceReview           SpaceReview[]
   Notification          Notification[]
   Payment               Payment[]
+  sessions              Session[]
+
 
   @@index([email])
   @@index([isActive])
@@ -206,6 +208,23 @@ model SavedSpaces {
   @@unique([userId, spaceId])
   @@index([userId])
   @@index([spaceId])
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  device     String?
+  userAgent  String?
+  ip         String?
+  lastActive DateTime @default(now())
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  isActive   Boolean  @default(true)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([isActive])
 }
 
 enum NotificationType {

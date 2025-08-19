@@ -1,12 +1,11 @@
-import { Container, AuthForm, ModalSlide } from "@/components";
+import { Container, AuthForm, ModalSlide, Button } from "@/components";
 import SettingsMenu from "@/components/profile/SettingsMenu";
 import { SHADOW_STYLE } from "@/constants/Colors";
 import React, { useState } from "react";
 import { Text, View, Modal } from "react-native";
 
 const Profile = () => {
-  const [openLogInModal, setOpenLoginModal] = useState(true);
-  const [openSignUpModal, setOpenSignUpModal] = useState(false);
+  const [openAuthModal, setOpenAuthModal] = useState(false);
   return (
     <Container className="pt-0" scrollable>
       <View
@@ -19,29 +18,17 @@ const Profile = () => {
         <Text className="mt-4 font-semibold text-[20px]">Mobolaji</Text>
         {/* <Text className="mt-3">Guest</Text> */}
         <View className="flex-row mt-4 gap-4">
-          <Text
-            onPress={() => setOpenLoginModal(true)}
-            className="bg-gray-300 py-3 px-4 rounded-full font-medium"
-          >
-            Log In
-          </Text>
-          <Text
-            onPress={() => setOpenSignUpModal(true)}
-            className="bg-gray-300 py-3 px-4 rounded-full font-medium"
-          >
-            Sign Up
-          </Text>
+          <Button onPress={() => setOpenAuthModal(true)} text="Log In or Sign Up"/>
         </View>
       </View>
       <SettingsMenu />
       <ModalSlide
-        visible={openLogInModal || openSignUpModal}
+        visible={openAuthModal}
         onClose={() => {
-          setOpenLoginModal(false);
-          setOpenSignUpModal(false);
+          setOpenAuthModal(false);
         }}
       >
-       <AuthForm/>
+       <AuthForm onClose={() =>  setOpenAuthModal(false)}/>
       </ModalSlide>
     </Container>
   );

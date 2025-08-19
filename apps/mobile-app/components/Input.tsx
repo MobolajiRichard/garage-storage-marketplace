@@ -115,7 +115,7 @@ const Input = <T extends FieldValues>({
               value={currentValue}
               {...textInputProps}
             />
-            {currentValue && (
+            {currentValue && !disabled && (
               <Pressable
                 onPress={() => {
                   onChange("");
