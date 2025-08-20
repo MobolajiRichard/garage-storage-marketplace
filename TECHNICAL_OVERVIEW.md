@@ -29,7 +29,7 @@ Some of the features that i'll like to implement which isn't already implemented
  - AI AutoReply (Host Only): This is a feature in which, incase an host isn't online they can enable AI auto reply to make AI respond to users on their behalf. Doing this will ensure quick interactions and boost customer retentions.
  - Cryptocurrecy Payment: users should be able to pay using their cryptocurrency wallets
  - Social Media Authentication
- - Referral Syste
+ - Referral System
 
 ### ARCHITECTURE AND SCALING
  - To scale the app, the first thing i'll do is to switch to a bigger Cloud Strorage Provider (AWS, Google Cloud, e.t.c).
