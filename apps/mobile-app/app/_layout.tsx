@@ -5,10 +5,11 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 import { PortalHost } from "@rn-primitives/portal";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+
 
 export const queryClient = new QueryClient({
   defaultOptions: {

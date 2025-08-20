@@ -18,7 +18,7 @@ const SpaceResultCard = ({
   id
 }: SpaceProps) => {
   const pan = Gesture.Pan().activeOffsetX([-30, 30]).failOffsetY([-10, 10]);
-  const { width } = Dimensions.get("window");
+  const { width, height } = Dimensions.get("window");
 
   return (
     <View className="relative h-full z-30">
@@ -35,7 +35,7 @@ const SpaceResultCard = ({
               <Image
                 source={item}
                 contentFit="cover"
-                style={{ height: "100%", width: "100%" }}
+                style={{ height, width }}
               />
             </View>
           )}

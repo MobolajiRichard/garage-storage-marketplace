@@ -50,9 +50,9 @@ export default function HomeScreen() {
           {isLoading && (
             <FlatList
               horizontal
-              data={[1,2,3,4,5]}
+              data={[1, 2, 3, 4, 5]}
               keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <HomeSpaceCardSkeleton  />}
+              renderItem={({ item }) => <HomeSpaceCardSkeleton />}
               contentContainerStyle={{ gap: 10 }}
               showsHorizontalScrollIndicator={false}
             />
@@ -91,24 +91,20 @@ export default function HomeScreen() {
         </View>
         <View className="mt-6">
           <Text className="mb-4 font-semibold ml-1">All Categories</Text>
-          <FlatList
-            data={categories}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => (
+          <View className="flex-row flex-wrap gap-4">
+            {categories?.map((c) => (
               <CategoryCard
+              key={c.id}
                 onPress={() =>
                   router.push({
                     pathname: "/space",
-                    params: { category: item.id },
+                    params: { category: c.id },
                   })
                 }
-                {...item}
+                {...c}
               />
-            )}
-            contentContainerStyle={{ gap: 10 }}
-            columnWrapperStyle={{ justifyContent: "center", gap: 10 }}
-            numColumns={2}
-          />
+            ))}
+          </View>
         </View>
       </View>
     </Container>

@@ -5,7 +5,7 @@ import { useMySpaces } from "@/hooks/useSpaces";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { FlatList, Pressable,  View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 
 const MySpaces = () => {
   const { data, isLoading } = useMySpaces();
@@ -20,10 +20,15 @@ const MySpaces = () => {
           <Feather name="plus" size={24} color="black" />
         </Pressable>
       </View>
+      {!!!data?.length && !isLoading && (
+        <Text className="text-center text-[16px] font-medium mt-[5vh]">
+          You haven't created any Space yet
+        </Text>
+      )}
       {!isLoading && (
         <FlatList
           data={data || []}
-          renderItem={({item}) => <MySpaceCard {...item} />}
+          renderItem={({ item }) => <MySpaceCard {...item} />}
           keyExtractor={(item) => item?.id}
           showsVerticalScrollIndicator={false}
         />

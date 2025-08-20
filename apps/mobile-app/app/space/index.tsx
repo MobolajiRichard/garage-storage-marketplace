@@ -118,12 +118,9 @@ const Spaces = () => {
               disableIntervalMomentum={true}
               snapToInterval={SCREEN_HEIGHT + statusBarHeight}
               renderItem={renderItem}
-              onEndReachedThreshold={0.5}
               bounces={false}
               scrollEventThrottle={16}
-              windowSize={5}
-              maxToRenderPerBatch={5}
-              removeClippedSubviews={true}
+              windowSize={50}
             />
           ) : (
             <View className="bg-primary/30 h-full items-center justify-center">

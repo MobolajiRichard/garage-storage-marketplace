@@ -1,9 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 
-
 /**
- * To hangle logout 
+ * To hangle logout
  */
 export const handleLogout = async () => {
   try {
@@ -16,16 +15,6 @@ export const handleLogout = async () => {
       // Still clear storage and navigate even if no user data
       await AsyncStorage.removeItem("accessToken");
       queryClient.clear();
-
-      // Use setTimeout to ensure navigation happens after current rendering cycle
-      setTimeout(() => {
-        try {
-          router.dismissAll();
-        } catch (navError) {
-          console.error("Navigation error during logout:", navError);
-        }
-      }, 100);
-      return;
     }
 
     queryClient.setQueryData(["user"], null);
@@ -34,7 +23,6 @@ export const handleLogout = async () => {
     // Use setTimeout to ensure navigation happens after current rendering cycle
     setTimeout(() => {
       try {
-        router.dismissAll();
         queryClient.clear();
       } catch (navError) {
         console.error("Navigation error during logout:", navError);

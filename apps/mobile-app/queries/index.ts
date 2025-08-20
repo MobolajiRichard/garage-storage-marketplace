@@ -15,7 +15,10 @@ const getHeaders = async (tokenName = "accessToken") => ({
   Authorization: `Bearer ${await AsyncStorage.getItem(tokenName)}`,
 });
 
-const API_URL = "http://localhost:5050/api/v1";
+//The BE has been deployed and it is available at this URL, if you wish to use the local please update to
+// http://localhost:5050/api/v1
+const API_URL = "https://garage-storage-marketplace-be-production.up.railway.app/api/v1";
+// const API_URL = "http://localhost:5050/api/v1";
 
 export const sendRequest = async (
   body: AxiosRequestConfig<any>

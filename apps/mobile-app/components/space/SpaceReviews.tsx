@@ -27,7 +27,6 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const onSubmit = async () => {
     setIsLoading(true);
     try {
@@ -40,7 +39,7 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
 
       setOpenModal(false);
 
-    //   Alert.alert("Sucess", "Review added");
+      //   Alert.alert("Sucess", "Review added");
       queryClient.invalidateQueries({ queryKey: ["space", data.id] });
       reset();
       setRating(1);
@@ -57,15 +56,21 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
 
   return (
     <View className="mt-6">
-      <Button
-        onPress={() => setOpenModal(true)}
-        className="mb-4"
-        variant="secondary"
-        text="Leave Review"
-      />
+      {user?.id && (
+        <Button
+          onPress={() => setOpenModal(true)}
+          className="mb-4"
+          variant="secondary"
+          text="Leave Review"
+        />
+      )}
+
+      {!!!data.reviews?.length && (
+        <Text className="text-center">No reviews yet</Text>
+      )}
       <FlatList
         data={data.reviews || []}
-        renderItem={({item}) => <SpaceReviewCard {...item}/>}
+        renderItem={({ item }) => <SpaceReviewCard {...item} />}
         contentContainerClassName="gap-6 "
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.createdAt?.toString()!}
@@ -80,8 +85,8 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
         <Text className="mb-10 mt-4 text-[18px] font-semibold">Review</Text>
         <View className="flex-row gap-1 mb-8">
           {[1, 2, 3, 4, 5]?.map((i) => (
-            <>
-              {rating >= i + 1 ? (
+            <View key={i}>
+              {rating >= i ? (
                 <Entypo
                   onPress={() => setRating(i)}
                   size={50}
@@ -97,7 +102,7 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
                   color="black"
                 />
               )}
-            </>
+            </View>
           ))}
         </View>
         <Input

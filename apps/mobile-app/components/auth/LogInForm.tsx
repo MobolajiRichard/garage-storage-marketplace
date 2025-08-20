@@ -15,6 +15,7 @@ import { z } from "zod";
 import { checkEmail, loginUser } from "@/queries";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { queryClient } from "@/app/_layout";
 
 export const loginSchema = z.object({
   email: z.email("Invalid email address"),
@@ -73,6 +74,9 @@ const LogInForm = ({
         text1: "Log In Successful",
         position: "top",
       });
+
+      queryClient.invalidateQueries({queryKey:['myNotifications']})
+      queryClient.invalidateQueries({queryKey:['user']})
 
       //close the modal after successful login
       onClose();

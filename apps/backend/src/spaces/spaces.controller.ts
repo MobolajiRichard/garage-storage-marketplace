@@ -21,7 +21,7 @@ export class SpacesController {
   constructor(private readonly spacesService: SpacesService) {}
 
   @Post()
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   createSpace(@Body() dto: any) {
     return this.spacesService.createSpace(dto);
   }
@@ -60,7 +60,6 @@ export class SpacesController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard)
   fetchSpace(@Param('id') id: string) {
     return this.spacesService.fetchSpace(id);
   }

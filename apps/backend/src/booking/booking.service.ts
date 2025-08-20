@@ -17,7 +17,7 @@ export class BookingService {
 
     const spaces = await this.prisma.booking.findMany({
       where: {
-        hostId: session?.hostId,
+        customerId: session?.userId,
       },
       include: {
         space: {

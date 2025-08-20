@@ -5,17 +5,30 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import React, { useCallback, useState } from "react";
-import {  ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import Button from "../Button";
 import { SpaceProps } from "@/types";
 import { getCurrencySymbol } from "@/utils/price";
 import SpaceBookingModal from "./SpaceBookingModal";
+import { useUser } from "@/hooks/useUser";
+import Toast from "react-native-toast-message";
 
 const SpaceOverview = ({ data }: { data: SpaceProps }) => {
   const [openModal, setOpenModal] = useState(false);
-  const onSuccess = useCallback(() => {
+  const { data: user } = useUser();
 
-  }, [])
+  const onOpenModal = () => {
+    if (!user?.id) {
+        Toast.show({
+            type:"error",
+            text1:"Please Log In.",
+            position:'top'
+
+        })
+        return
+    }
+    setOpenModal(true);
+  };
 
   return (
     <ScrollView className="flex-1 mb-5" showsVerticalScrollIndicator={false}>
@@ -78,11 +91,15 @@ const SpaceOverview = ({ data }: { data: SpaceProps }) => {
         </View>
 
         <Button
-          onPress={() => setOpenModal(true)}
+          onPress={onOpenModal}
           text="Book Now"
           className="mt-6"
         />
-        <SpaceBookingModal data={data} openModal={openModal} setOpenModal={setOpenModal} />
+        <SpaceBookingModal
+          data={data}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
       </View>
     </ScrollView>
   );

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import ModalSlide from "../ModalSlide";
-import { Pressable, View } from "react-native";
+import { Alert, Pressable, View } from "react-native";
 import { Text } from "react-native";
 import DateTimePickerModal, { DateTimePickerTrigger } from "../DateTimePicker";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,11 +41,8 @@ const SpaceBookingModal = ({
     try {
       setIsLoading(true);
       await bookSpace(body);
+      Alert.alert("Sucess", "Space Booked Successfully");
       setOpenModal(false);
-      Toast.show({
-        type: "success",
-        text1: "Space Booked Successfully",
-      });
     } catch (error) {
       console.log(error);
       Toast.show({
@@ -100,7 +97,12 @@ const SpaceBookingModal = ({
             <Text className="font-medium text-[16px]">CARD</Text>
           </Pressable>
         </View>
-        <Button  loading={isLoading} onPress={onSubmit} text="Book" className="mt-6" />
+        <Button
+          loading={isLoading}
+          onPress={onSubmit}
+          text="Book"
+          className="mt-6"
+        />
       </View>
 
       <DateTimePickerModal

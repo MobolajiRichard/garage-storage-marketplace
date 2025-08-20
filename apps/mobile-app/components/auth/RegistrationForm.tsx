@@ -12,6 +12,7 @@ import KeyboardWrapper from "../KeyboardWrapper";
 import Toast from "react-native-toast-message";
 import { registerUser } from "@/queries";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { queryClient } from "@/app/_layout";
 
 export const formSchema = z.object({
   email: z.email("Invalid email address"),
@@ -66,6 +67,9 @@ const RegistrationForm = ({
         type: "success",
         text1: "Sign Up Succesful!",
       });
+
+      queryClient.invalidateQueries({queryKey:['myNotifications']})
+      queryClient.invalidateQueries({queryKey:['user']})
 
       //close modal
       onClose();
