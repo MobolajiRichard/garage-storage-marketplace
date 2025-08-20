@@ -20,6 +20,7 @@ model User {
   name                  String?
   password              String?
   hostProfile           HostProfile?
+  phoneNumber           String?
   receivedMessages      ChatMessage[]  @relation("MessageReceiver")
   sentMessages          ChatMessage[]  @relation("MessageSender")
   pushNotificationToken String?
@@ -37,7 +38,6 @@ model User {
   Notification          Notification[]
   Payment               Payment[]
   sessions              Session[]
-
 
   @@index([email])
   @@index([isActive])
@@ -65,8 +65,10 @@ model Space {
   description String
   price       Float?
   rating      Float?
+  images      String[]
+  categories  String[]
   ratingCount Int           @default(0)
-  isBooked    Boolean       @default(true)
+  isBooked    Boolean       @default(false)
   isDeleted   Boolean       @default(false)
   reviews     SpaceReview[]
   bookings    Booking[]
@@ -75,6 +77,7 @@ model Space {
   updatedAt   DateTime      @updatedAt
   ChatMessage ChatMessage[]
   SavedSpaces SavedSpaces[]
+  Address     Address?
 
   @@index([hostId])
 }
@@ -225,6 +228,19 @@ model Session {
   @@index([userId])
   @@index([expiresAt])
   @@index([isActive])
+}
+
+model Address {
+  id        String                  @id @default(cuid())
+  address   String
+  createdAt DateTime                @default(now())
+  spaceId   String                  @unique
+  city      String
+  country   String
+  zipCode   String?
+  space     Space                   @relation(fields: [spaceId], references: [id])
+
+  @@index([spaceId])
 }
 
 enum NotificationType {

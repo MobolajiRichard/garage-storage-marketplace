@@ -69,6 +69,7 @@ export class AuthService {
     accountType: string;
   }) {
     const user = await this.findByEmail(email);
+    console.log({user})
 
     if (user) {
       throw new ConflictException('Email already exists');
@@ -112,6 +113,46 @@ export class AuthService {
       },
     });
 
-    return {token}
+    return { token };
+  }
+
+  async getSession(sessionId: string) {
+    if (!sessionId) {
+      return null;
+    }
+
+    const session = await this.prisma.session.findUnique({
+      where: {
+        id: sessionId,
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            id: true,
+            isActive: true,
+            hostProfile:true
+          },
+        },
+      },
+    });
+
+    if (!session || !session.user || !session.user.isActive) {
+      return null;
+    }
+
+    await this.prisma.session.update({
+      where: { id: session.id },
+      data: { lastActive: new Date() },
+    });
+
+    return {
+      sessionId: session.id,
+      userId: session.user.id,
+      hostId: session.user.hostProfile?.id
+    };
   }
 }

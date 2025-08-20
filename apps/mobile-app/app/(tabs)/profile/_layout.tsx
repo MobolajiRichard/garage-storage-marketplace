@@ -28,6 +28,7 @@ export default function ProfileLayout() {
         },
       }}
     >
+
       <Stack.Screen name="main" options={{ headerShown: false }} />
       <Stack.Screen
         name="PersonalInformation"
@@ -36,6 +37,8 @@ export default function ProfileLayout() {
       <Stack.Screen name="MySpaces" options={{ headerShown: false }} />
       <Stack.Screen name="Security" options={{ headerShown: false }} />
       <Stack.Screen name="Languages" options={{ headerShown: false }} />
+      <Stack.Screen name="CreateSpace" options={{ headerShown: false }} />
+
     </Stack>
   );
 }

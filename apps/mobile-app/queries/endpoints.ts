@@ -7,4 +7,11 @@ export const API_ENDPOINTS = {
   USER: {
     ME: "/user/me",
   },
+  FILE: {
+    UPLOAD: "/file/upload",
+  },
+  SPACE: {
+    CREATE: "/spaces",
+    ME: "/spaces/me"
+  },
 };

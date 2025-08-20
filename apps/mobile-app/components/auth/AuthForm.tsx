@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { KeyboardAvoidingView, Text, View } from "react-native";
 import LogInForm from "./LogInForm";
 import RegistrationForm from "./RegistrationForm";
+import { useUser } from "@/hooks/useUser";
 
 const AuthForm = ({ onClose }: { onClose: () => void }) => {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
+
+
 
   return (
     <KeyboardAvoidingView>

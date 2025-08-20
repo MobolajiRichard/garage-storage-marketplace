@@ -5,13 +5,19 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { FileModule } from './file/file.module';
+import { SpacesModule } from './spaces/spaces.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
     UserModule,
     AuthModule,
     PrismaModule,
+    FileModule,
+    SpacesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

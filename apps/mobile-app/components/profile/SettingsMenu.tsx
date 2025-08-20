@@ -1,3 +1,5 @@
+import { useUser } from "@/hooks/useUser";
+import { handleLogout } from "@/utils/handleLogout";
 import {
   AntDesign,
   Entypo,
@@ -13,10 +15,24 @@ import { twMerge } from "tailwind-merge";
 
 export default function SettingsMenu() {
   const router = useRouter();
-  const handleLogout = () => {};
+  const { data: user } = useUser();
+
+
+  const links = useMemo(() => {
+    let links = user?.id
+      ? LINKS()
+      : LINKS()?.filter((item) => !item.isAuthenticated);
+
+    if (!user?.hostProfile?.id) {
+      links = links.filter((item) => !item.isHost);
+    }
+
+    return links || [];
+  }, [user]);
+
   return (
-    <View className="mt-4 flex-col  bg-white pb-2">
-      {LINKS().map((item, index) => (
+    <View className="mt-4 flex-col pb-2">
+      {links.map((item, index) => (
         <Pressable
           key={index}
           className={twMerge("flex flex-row items-center justify-between py-6")}
@@ -44,7 +60,8 @@ export default function SettingsMenu() {
           )}
         </Pressable>
       ))}
-      <Text className="color-gray-450 mt-3 h-full w-full">
+      <View className=" border-gray-300 border-[0.5px] my-4"/>
+      <Text className="text-gray-400 mt-3 h-full w-full">
         Garage Space 1.0.0
       </Text>
     </View>
@@ -57,26 +74,29 @@ export const LINKS = () => [
     title: "Personal Information",
     path: "/(tabs)/profile/PersonalInformation",
     chevrolet: true,
+    isAuthenticated: true,
   },
   {
     icon: <MaterialIcons name="warehouse" size={24} color="black" />,
     title: "My Spaces",
-    path: "/(tabs)/(profile)/MySpaces",
+    path: "/(tabs)/profile/MySpaces",
     chevrolet: true,
-    isWorker: true,
+    isHost: true,
+    isAuthenticated: true,
   },
 
   {
     icon: <MaterialIcons name="security" size={24} color="black" />,
     title: "Security",
-    path: "/(tabs)/(profile)/Security",
+    path: "/(tabs)/profile/Security",
     chevrolet: true,
     isEmailProvider: true,
+    isAuthenticated: true,
   },
   {
     icon: <Ionicons name="language-outline" size={24} color="black" />,
     title: "Language",
-    path: "/(tabs)/(profile)/Languages",
+    path: "/(tabs)/profile/Languages",
     chevrolet: true,
   },
   {
@@ -91,5 +111,6 @@ export const LINKS = () => [
     logout: true,
     path: "",
     chevrolet: false,
+    isAuthenticated: true,
   },
 ];

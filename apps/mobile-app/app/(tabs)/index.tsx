@@ -77,7 +77,7 @@ export default function HomeScreen() {
           <FlatList
             data={categories}
             keyExtractor={(item) => item.name}
-            renderItem={({ item }) => <CategoryCard {...item} />}
+            renderItem={({ item }) => <CategoryCard onPress={() => {}} {...item} />}
             contentContainerStyle={{ gap: 10 }}
             columnWrapperStyle={{ justifyContent: "center", gap: 10 }}
             numColumns={2}

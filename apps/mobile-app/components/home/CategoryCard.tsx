@@ -1,5 +1,5 @@
 import { IMAGES } from "@/assets/images";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -8,21 +8,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import BlackVeil from "../BlackVeil";
+import { CategoryProps } from "@/constants/categories";
 
-const CategoryCard = ({
-    name,
-    image
-}:{
-    name:string,
-    image: ImageSourcePropType
-}) => {
+const CategoryCard: FC<CategoryProps & {onPress:() => void}> = ({ name, image, onPress }) => {
   const windowWidth = useMemo(() => Dimensions.get("window").width, []);
-  const size = useMemo(() => windowWidth / 2 - 24, [windowWidth]);
+  const size = useMemo(() => windowWidth / 2 - 30, [windowWidth]);
   return (
     <TouchableOpacity
       style={{ width: size, height: size }}
       className="rounded-[15px] relative  items-center justify-end"
       activeOpacity={0.8}
+      onPress={onPress}
     >
       <ImageBackground
         source={image}
@@ -32,7 +28,7 @@ const CategoryCard = ({
       />
       <BlackVeil className="rounded-[15px] " />
       <Text className="text-white capitalize font-bold text-[18px] z-30 relative mb-4 mx-4 text-center">
-       {name}
+        {name}
       </Text>
     </TouchableOpacity>
   );
