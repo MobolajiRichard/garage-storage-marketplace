@@ -23,8 +23,9 @@ const Screens = () => {
   useUser();
   return (
     <>
-      <Stack>
+      <Stack >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen  name="space/[id]/index" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

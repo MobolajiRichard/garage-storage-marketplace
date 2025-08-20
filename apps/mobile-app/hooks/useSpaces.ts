@@ -1,4 +1,4 @@
-import { fetchMySpaces, getUser } from '@/queries';
+import { fetchMySpaces, fetchSpace, getUser } from '@/queries';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQuery } from '@tanstack/react-query';
 
@@ -14,6 +14,19 @@ export function useMySpaces() {
         return null;
       }
       return fetchMySpaces();
+    },
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+    return data;
+}
+
+
+export function useSingleSpace(id:string) {
+  const data = useQuery({
+    queryKey: ['space', id],
+    queryFn: async () => {
+      return fetchSpace(id);
     },
     refetchOnWindowFocus: false,
     retry: false,

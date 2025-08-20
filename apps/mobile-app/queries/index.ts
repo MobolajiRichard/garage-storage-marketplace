@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_ENDPOINTS } from "./endpoints";
 import { RegistrationInput } from "@/components/auth/RegistrationForm";
 import { LoginInput } from "@/components/auth/LogInForm";
-import { SpaceProps, UserProps } from "@/types";
+import { Review, SpaceProps, UserProps } from "@/types";
 
 /**
  * Function to get the correct auth header with the right token
@@ -105,5 +105,21 @@ export async function fetchMySpaces(): Promise<SpaceProps[]> {
   return sendRequest({
     url: API_ENDPOINTS.SPACE.ME,
     method: 'GET'
+  });
+}
+
+export async function fetchSpace(id:string): Promise<SpaceProps> {
+  return sendRequest({
+    url: API_ENDPOINTS.SPACE.CREATE + `/${id}` ,
+    method: 'GET'
+  });
+}
+
+export async function leaveSpaceReview(data:Review) {
+    console.log({data})
+  return sendRequest({
+    url: API_ENDPOINTS.SPACE.REVIEW.replace(':id', data.spaceId),
+    method: 'POST',
+    data
   });
 }

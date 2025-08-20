@@ -12,6 +12,8 @@ export const API_ENDPOINTS = {
   },
   SPACE: {
     CREATE: "/spaces",
-    ME: "/spaces/me"
+    ME: "/spaces/me",
+    REVIEW:"/spaces/:id/review",
+    BOOK:"/spaces/:id/book",
   },
 };

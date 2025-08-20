@@ -17,6 +17,7 @@ import { SpaceProps } from "@/types";
 import { twMerge } from "tailwind-merge";
 import { getCurrencySymbol } from "@/utils/price";
 import Skeleton from "../Skeleton";
+import { router } from "expo-router";
 
 const MySpaceCard: FC<SpaceProps> = ({
   images,
@@ -25,6 +26,7 @@ const MySpaceCard: FC<SpaceProps> = ({
   Address,
   currency,
   isBooked,
+  id
 }) => {
   return (
     <View className="mt-6">
@@ -73,7 +75,7 @@ const MySpaceCard: FC<SpaceProps> = ({
               <Entypo name="dots-three-vertical" size={24} color="black" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="flex-row items-center gap-2 border-b border-gray-300 !px-3 !py-3">
+              <DropdownMenuItem onPress={() => router.push(`/space/${id}`)} className="flex-row items-center gap-2 border-b border-gray-300 !px-3 !py-3">
                 <AntDesign name="eye" size={20} color="black" />
                 <Text className="font-medium">View</Text>
               </DropdownMenuItem>

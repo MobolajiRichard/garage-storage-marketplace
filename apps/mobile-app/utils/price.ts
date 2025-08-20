@@ -50,5 +50,6 @@ const currencySymbolMap: Record<Currency, string> = {
 };
 
 export function getCurrencySymbol(currency: Currency): string {
+    if(!currency) return ''
   return currencySymbolMap[currency] ?? currency;
 }

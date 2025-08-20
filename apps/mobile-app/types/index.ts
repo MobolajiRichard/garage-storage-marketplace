@@ -23,6 +23,27 @@ export type Address = {
   zipCode: string;
 };
 
+export type Booking = {
+  spaceId: string;
+  customerId: string;
+  userId: string;
+  endAt: string;
+  status: string;
+  startAt: string;
+  closed: boolean;
+  price?: number;
+};
+
+export type Review = {
+  spaceId: string;
+  userId: string;
+  review: string;
+  user?: {
+    name: string;
+  };
+  rating: number;
+};
+
 export type SpaceProps = {
   id: string;
   hostId: string;
@@ -36,4 +57,7 @@ export type SpaceProps = {
   ratingCount: number;
   isBooked: boolean;
   Address: Address;
+  bookings: string[];
+  reviews: Review[];
+  host: HostProfileProps;
 };

@@ -75,7 +75,6 @@ model Space {
   currency    String?       @default("USD")
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  ChatMessage ChatMessage[]
   SavedSpaces SavedSpaces[]
   Address     Address?
 
@@ -103,9 +102,6 @@ model Booking {
   price    Float?
   currency String? @default("USD")
 
-  chatMessageId String      @unique
-  chatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
-
   payments Payment[]
 
   createdAt DateTime @default(now())
@@ -128,10 +124,6 @@ model SpaceReview {
 
   rating Int
   review String
-
-  price    Float?
-  currency String? @default("USD")
-  isPaid   Boolean @default(false)
 
   createdAt DateTime @default(now())
 }
@@ -163,12 +155,9 @@ model ChatMessage {
   updatedAt   DateTime @updatedAt
   attachments String[]
   metadata    Json?
-  spaceId     String?
-  space       Space?   @relation(fields: [spaceId], references: [id])
 
   receiver User     @relation("MessageReceiver", fields: [receiverId], references: [id])
   sender   User     @relation("MessageSender", fields: [senderId], references: [id])
-  Booking  Booking?
 
   @@index([senderId])
   @@index([receiverId])
