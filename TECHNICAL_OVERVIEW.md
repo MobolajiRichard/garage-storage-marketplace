@@ -22,21 +22,21 @@ I'll work on the project in phases, with each phase having particular target e.g
 
 - FEATURES
 Some of the features that i'll like to implement which isn't already implemented are:
-1 - Real Time In-App Chat: This will introduce the ability for host, guest to send messages in the platform. I'll use pusher to implement ral time communication in the platform. This is because pusher is easy integrate and scale, and i have had previous experiences integrating pusher for real-time communication.
-2 - Online Presence: This will show show which host is online for faster negotiations. 
-3 - Price Negotations: Instead of the fixed price that is curretly implemented, i want users to be able to negotiate price on the platform making the process looks similar to real life interactions
-4 - AI Bot: I'll implement AI bot that users can interact with. instead of going through the traditional search routine, users can talk to AI Bot to get specific spaces based on their requests
-5 - AI AutoReply (Host Only): This is a feature in which, incase an host isn't online they can enable AI auto reply to make AI respond to users on their behalf. Doing this will ensure quick interactions and boost customer retentions.
-6 - Cryptocurrecy Payment: users should be able to pay using their cryptocurrency wallets
-7 - Social Media Authentication
-8 - Referral Syste
+ - Real Time In-App Chat: This will introduce the ability for host, guest to send messages in the platform. I'll use pusher to implement ral time communication in the platform. This is because pusher is easy integrate and scale, and i have had previous experiences integrating pusher for real-time communication.
+ - Online Presence: This will show show which host is online for faster negotiations. 
+ - Price Negotations: Instead of the fixed price that is curretly implemented, i want users to be able to negotiate price on the platform making the process looks similar to real life interactions
+ - AI Bot: I'll implement AI bot that users can interact with. instead of going through the traditional search routine, users can talk to AI Bot to get specific spaces based on their requests
+ - AI AutoReply (Host Only): This is a feature in which, incase an host isn't online they can enable AI auto reply to make AI respond to users on their behalf. Doing this will ensure quick interactions and boost customer retentions.
+ - Cryptocurrecy Payment: users should be able to pay using their cryptocurrency wallets
+ - Social Media Authentication
+ - Referral Syste
 
 - ARCHITECTURE AND SCALING
-1 - To scale the app, the first thing i'll do is to switch to a bigger Cloud Strorage Provider (AWS, Google Cloud, e.t.c).
-2 - I'll implement caching with Redis for faster search and availability lookups.
-3 - I'll inmplement Load balancing and horizontal scaling for backend services.
-4 - I'll create separate microservices for bookings, payments, and messaging once usage grows.
-5 - I'll implement queue system (e.g., BullMQ) for handling background jobs.
+ - To scale the app, the first thing i'll do is to switch to a bigger Cloud Strorage Provider (AWS, Google Cloud, e.t.c).
+ - I'll implement caching with Redis for faster search and availability lookups.
+ - I'll inmplement Load balancing and horizontal scaling for backend services.
+ - I'll create separate microservices for bookings, payments, and messaging once usage grows.
+ - I'll implement queue system (e.g., BullMQ) for handling background jobs.
 
 -LONG TERM VISION
 Expansion into other verticals: parking spots, unused land, house, cars e.t.c.
