@@ -16,4 +16,7 @@ export const API_ENDPOINTS = {
     REVIEW:"/spaces/:id/review",
     BOOK:"/spaces/:id/book",
   },
+  BOOKINGS:{
+    ME:"/booking/me"
+  }
 };

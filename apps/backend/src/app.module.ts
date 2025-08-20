@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { FileModule } from './file/file.module';
 import { SpacesModule } from './spaces/spaces.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SpacesModule } from './spaces/spaces.module';
     PrismaModule,
     FileModule,
     SpacesModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

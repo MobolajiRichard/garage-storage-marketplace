@@ -59,11 +59,15 @@ export class SpacesService {
       where: {
         id: spaceId,
       },
+
       include: {
         Address: true,
         bookings: true,
         reviews: {
-          select: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          include: {
             user: {
               select: {
                 name: true,
@@ -99,6 +103,12 @@ export class SpacesService {
       },
       select: {
         title: true,
+
+        host: {
+          select: {
+            userId:true,
+          },
+        },
       },
     });
 
@@ -108,7 +118,7 @@ export class SpacesService {
         title: 'Space Booked',
         content: `${bookedSpace?.title} has been booked for ${data.startAt} to ${data.endAt}`,
         type: 'PAYMENT',
-        userId: data.hostId,
+        userId: bookedSpace?.host.userId!
       },
     });
 

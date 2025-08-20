@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_ENDPOINTS } from "./endpoints";
 import { RegistrationInput } from "@/components/auth/RegistrationForm";
 import { LoginInput } from "@/components/auth/LogInForm";
-import { Review, SpaceProps, UserProps } from "@/types";
+import { Booking, Review, SpaceProps, UserProps } from "@/types";
 
 /**
  * Function to get the correct auth header with the right token
@@ -116,10 +116,25 @@ export async function fetchSpace(id:string): Promise<SpaceProps> {
 }
 
 export async function leaveSpaceReview(data:Review) {
-    console.log({data})
   return sendRequest({
     url: API_ENDPOINTS.SPACE.REVIEW.replace(':id', data.spaceId),
     method: 'POST',
     data
+  });
+}
+
+export async function bookSpace(data:Booking) {
+  return sendRequest({
+    url: API_ENDPOINTS.SPACE.BOOK.replace(':id', data.spaceId),
+    method: 'POST',
+    data
+  });
+}
+
+//BOOKINGS
+export async function fetchMyBookings(): Promise<Booking[]>  {
+  return sendRequest({
+    url: API_ENDPOINTS.BOOKINGS.ME,
+    method: 'GET'
   });
 }

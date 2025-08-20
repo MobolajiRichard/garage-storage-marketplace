@@ -24,14 +24,17 @@ export type Address = {
 };
 
 export type Booking = {
+    id?:string
   spaceId: string;
   customerId: string;
-  userId: string;
-  endAt: string;
-  status: string;
-  startAt: string;
-  closed: boolean;
+  hostId: string;
+  endAt: Date;
+  status?: string;
+  startAt:Date;
+  closed?: boolean;
   price?: number;
+  currency?:string
+  space?:SpaceProps
 };
 
 export type Review = {
@@ -42,6 +45,7 @@ export type Review = {
     name: string;
   };
   rating: number;
+  createdAt?:string
 };
 
 export type SpaceProps = {

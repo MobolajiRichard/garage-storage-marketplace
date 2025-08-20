@@ -4,13 +4,19 @@ import {
   FontAwesome,
   FontAwesome5,
 } from "@expo/vector-icons";
-import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import {  ScrollView, Text, View } from "react-native";
 import Button from "../Button";
 import { SpaceProps } from "@/types";
 import { getCurrencySymbol } from "@/utils/price";
+import SpaceBookingModal from "./SpaceBookingModal";
 
 const SpaceOverview = ({ data }: { data: SpaceProps }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const onSuccess = useCallback(() => {
+
+  }, [])
+
   return (
     <ScrollView className="flex-1 mb-5" showsVerticalScrollIndicator={false}>
       <View className="mt-6">
@@ -54,7 +60,10 @@ const SpaceOverview = ({ data }: { data: SpaceProps }) => {
           />
           <Text className="text-[16px] font-semibold text-gray-600">Price</Text>
         </View>
-        <Text className="ml-8">{getCurrencySymbol(data?.currency)}{data?.price}/hr</Text>
+        <Text className="ml-8">
+          {getCurrencySymbol(data?.currency)}
+          {data?.price}/hr
+        </Text>
 
         <View className="flex-row items-center mt-6  mb-1 gap-2">
           <View className="flex-row items-center gap-2">
@@ -63,10 +72,17 @@ const SpaceOverview = ({ data }: { data: SpaceProps }) => {
               Rating
             </Text>
           </View>
-          <Text>- {!data?.rating  ? "No ratings yet." : `${data?.rating}/5`}</Text>
+          <Text>
+            - {!data?.rating ? "No ratings yet." : `${data?.rating}/5`}
+          </Text>
         </View>
 
-        <Button text="Book Now" className="mt-6" />
+        <Button
+          onPress={() => setOpenModal(true)}
+          text="Book Now"
+          className="mt-6"
+        />
+        <SpaceBookingModal data={data} openModal={openModal} setOpenModal={setOpenModal} />
       </View>
     </ScrollView>
   );

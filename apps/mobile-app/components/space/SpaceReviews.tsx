@@ -40,7 +40,7 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
 
       setOpenModal(false);
 
-      Alert.alert("Sucess", "Review added");
+    //   Alert.alert("Sucess", "Review added");
       queryClient.invalidateQueries({ queryKey: ["space", data.id] });
       reset();
       setRating(1);
@@ -64,10 +64,11 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
         text="Leave Review"
       />
       <FlatList
-        data={[1, 2, 3, 4, 5, 6]}
-        renderItem={() => <SpaceReviewCard />}
+        data={data.reviews || []}
+        renderItem={({item}) => <SpaceReviewCard {...item}/>}
         contentContainerClassName="gap-6 "
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.createdAt?.toString()!}
         ListFooterComponent={() => <View />}
         ListFooterComponentClassName="mb-[100px]"
       />
@@ -82,14 +83,14 @@ const SpaceReviews = ({ data }: { data: SpaceProps }) => {
             <>
               {rating >= i + 1 ? (
                 <Entypo
-                  onPress={() => setRating(i + 1)}
+                  onPress={() => setRating(i)}
                   size={50}
                   name="star"
                   color="#28287a"
                 />
               ) : (
                 <Entypo
-                  onPress={() => setRating(i + 1)}
+                  onPress={() => setRating(i)}
                   key={i}
                   name="star-outlined"
                   size={50}

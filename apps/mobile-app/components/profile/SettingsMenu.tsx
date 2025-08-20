@@ -84,6 +84,13 @@ export const LINKS = () => [
     isHost: true,
     isAuthenticated: true,
   },
+  {
+    icon: <FontAwesome5 name="receipt" size={24} color="black" />,
+    title: "My Bookings",
+    path: "/(tabs)/profile/MyBookings",
+    chevrolet: true,
+    isAuthenticated: true,
+  },
 
   {
     icon: <MaterialIcons name="security" size={24} color="black" />,

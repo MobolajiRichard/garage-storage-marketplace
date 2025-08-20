@@ -35,6 +35,7 @@ export default function ProfileLayout() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="MySpaces" options={{ headerShown: false }} />
+      <Stack.Screen name="MyBookings" options={{ headerShown: false }} />
       <Stack.Screen name="Security" options={{ headerShown: false }} />
       <Stack.Screen name="Languages" options={{ headerShown: false }} />
       <Stack.Screen name="CreateSpace" options={{ headerShown: false }} />
