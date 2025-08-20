@@ -8,18 +8,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 import BlackVeil from "../BlackVeil";
+import { router } from "expo-router";
 
 const LocationCard = ({
-    name,
-    image
-}:{
-    name:string,
-    image: ImageSourcePropType
+  name,
+  image,
+}: {
+  name: string;
+  image: ImageSourcePropType;
 }) => {
-  const windowWidth = useMemo(() => Dimensions.get("window").width, []);
-  const size = useMemo(() => windowWidth / 2 - 24, [windowWidth]);
   return (
     <TouchableOpacity
+      onPress={() =>
+        router.push({
+          pathname: "/space",
+          params: { city: name },
+        })
+      }
       className="rounded-[15px] h-[150px] w-[150px] relative  items-center justify-end"
       activeOpacity={0.8}
     >
@@ -30,7 +35,7 @@ const LocationCard = ({
       />
       <BlackVeil className="rounded-[15px] " />
       <Text className="text-white capitalize font-bold text-[18px] z-30 relative mb-4 mx-4 text-center">
-       {name}
+        {name}
       </Text>
     </TouchableOpacity>
   );

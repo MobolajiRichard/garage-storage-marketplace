@@ -67,7 +67,7 @@ model Space {
   rating      Float?
   images      String[]
   categories  String[]
-  ratingCount Int           @default(0)
+  ratingCount Int           @default(1)
   isBooked    Boolean       @default(false)
   isDeleted   Boolean       @default(false)
   reviews     SpaceReview[]

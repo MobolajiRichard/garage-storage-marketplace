@@ -79,7 +79,7 @@ export async function updateUserInformation(data: {
   return sendRequest({
     url: API_ENDPOINTS.USER.ME,
     method: "PATCH",
-    data
+    data,
   });
 }
 
@@ -87,7 +87,7 @@ export async function updateUserInformation(data: {
 export async function uploadFile(data: unknown): Promise<string> {
   return sendRequest({
     url: API_ENDPOINTS.FILE.UPLOAD,
-    method: 'POST',
+    method: "POST",
     data,
   });
 }
@@ -96,7 +96,7 @@ export async function uploadFile(data: unknown): Promise<string> {
 export async function createSpace(data: unknown): Promise<string> {
   return sendRequest({
     url: API_ENDPOINTS.SPACE.CREATE,
-    method: 'POST',
+    method: "POST",
     data,
   });
 }
@@ -104,37 +104,57 @@ export async function createSpace(data: unknown): Promise<string> {
 export async function fetchMySpaces(): Promise<SpaceProps[]> {
   return sendRequest({
     url: API_ENDPOINTS.SPACE.ME,
-    method: 'GET'
+    method: "GET",
   });
 }
 
-export async function fetchSpace(id:string): Promise<SpaceProps> {
+export async function fetchSpace(id: string): Promise<SpaceProps> {
   return sendRequest({
-    url: API_ENDPOINTS.SPACE.CREATE + `/${id}` ,
-    method: 'GET'
+    url: API_ENDPOINTS.SPACE.CREATE + `/${id}`,
+    method: "GET",
   });
 }
 
-export async function leaveSpaceReview(data:Review) {
+export async function leaveSpaceReview(data: Review) {
   return sendRequest({
-    url: API_ENDPOINTS.SPACE.REVIEW.replace(':id', data.spaceId),
-    method: 'POST',
-    data
+    url: API_ENDPOINTS.SPACE.REVIEW.replace(":id", data.spaceId),
+    method: "POST",
+    data,
   });
 }
 
-export async function bookSpace(data:Booking) {
+export async function bookSpace(data: Booking) {
   return sendRequest({
-    url: API_ENDPOINTS.SPACE.BOOK.replace(':id', data.spaceId),
-    method: 'POST',
-    data
+    url: API_ENDPOINTS.SPACE.BOOK.replace(":id", data.spaceId),
+    method: "POST",
+    data,
+  });
+}
+
+export async function allSpaces(params: {
+  category?: string[];
+  country?: string;
+  city?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  minRating?: string;
+}): Promise<SpaceProps[]> {
+  return sendRequest({
+    url: API_ENDPOINTS.SPACE.CREATE,
+    method: "GET",
+    params,
+    paramsSerializer: {
+      // ensures arrays are sent as ?category=food&category=drinks
+      serialize: (p) =>
+        new URLSearchParams(p as Record<string, string>).toString(),
+    },
   });
 }
 
 //BOOKINGS
-export async function fetchMyBookings(): Promise<Booking[]>  {
+export async function fetchMyBookings(): Promise<Booking[]> {
   return sendRequest({
     url: API_ENDPOINTS.BOOKINGS.ME,
-    method: 'GET'
+    method: "GET",
   });
 }

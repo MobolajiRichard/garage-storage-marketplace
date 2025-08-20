@@ -7,9 +7,12 @@ import {
   LocationCard,
   SpaceCard,
 } from "@/components";
+import { HomeSpaceCardSkeleton } from "@/components/home/SpaceCard";
 import { categories } from "@/constants/categories";
 import { locations } from "@/constants/locations";
+import { useAllSpaces } from "@/hooks/useSpaces";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { useForm } from "react-hook-form";
 import { FlatList, Text, View } from "react-native";
 
@@ -20,6 +23,8 @@ export default function HomeScreen() {
       aiText: "",
     },
   });
+
+  const { data, isLoading } = useAllSpaces({});
   return (
     <Container fullScreen scrollable>
       <View className="flex-1 pt-4 w-full">
@@ -32,14 +37,26 @@ export default function HomeScreen() {
         />
         <View className="mt-6">
           <Text className="mb-4 font-semibold ml-1">Recommended Garages</Text>
-          <FlatList
-            horizontal
-            data={[1, 2, 3, 4, 5, 6]}
-            keyExtractor={(item) => item.toString()}
-            renderItem={({ item }) => <SpaceCard />}
-            contentContainerStyle={{ gap: 10 }}
-            showsHorizontalScrollIndicator={false}
-          />
+          {!isLoading && (
+            <FlatList
+              horizontal
+              data={data?.slice(0, 5)}
+              keyExtractor={(item) => item.id!}
+              renderItem={({ item }) => <SpaceCard {...item} />}
+              contentContainerStyle={{ gap: 10 }}
+              showsHorizontalScrollIndicator={false}
+            />
+          )}
+          {isLoading && (
+            <FlatList
+              horizontal
+              data={[1,2,3,4,5]}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <HomeSpaceCardSkeleton  />}
+              contentContainerStyle={{ gap: 10 }}
+              showsHorizontalScrollIndicator={false}
+            />
+          )}
         </View>
         <View className="mt-6">
           <Text className="mb-4 font-semibold ml-1">Popular Locations</Text>
@@ -77,7 +94,17 @@ export default function HomeScreen() {
           <FlatList
             data={categories}
             keyExtractor={(item) => item.name}
-            renderItem={({ item }) => <CategoryCard onPress={() => {}} {...item} />}
+            renderItem={({ item }) => (
+              <CategoryCard
+                onPress={() =>
+                  router.push({
+                    pathname: "/space",
+                    params: { category: item.id },
+                  })
+                }
+                {...item}
+              />
+            )}
             contentContainerStyle={{ gap: 10 }}
             columnWrapperStyle={{ justifyContent: "center", gap: 10 }}
             numColumns={2}

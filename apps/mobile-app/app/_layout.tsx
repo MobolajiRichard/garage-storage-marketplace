@@ -4,11 +4,11 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
-import { PortalHost } from '@rn-primitives/portal';
-
+import { PortalHost } from "@rn-primitives/portal";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,14 +23,15 @@ const Screens = () => {
   useUser();
   return (
     <>
-      <Stack >
+      <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="space/index" options={{ headerShown: false }} />
         <Stack.Screen  name="space/[id]/index" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
       <Toast position="bottom" />
-      <PortalHost/>
+      <PortalHost />
     </>
   );
 };
@@ -48,7 +49,9 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Screens />
+      <GestureHandlerRootView>
+        <Screens />
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }

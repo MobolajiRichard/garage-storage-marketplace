@@ -1,14 +1,13 @@
-import { fetchMySpaces, fetchSpace, getUser } from '@/queries';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useQuery } from '@tanstack/react-query';
-
+import { allSpaces, fetchMySpaces, fetchSpace, getUser } from "@/queries";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useQuery } from "@tanstack/react-query";
 
 export function useMySpaces() {
   const data = useQuery({
-    queryKey: ['mySpaces'],
+    queryKey: ["mySpaces"],
     queryFn: async () => {
       // Check if token exists before making the API call
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await AsyncStorage.getItem("accessToken");
       if (!token) {
         // If no token, return null instead of making the API call
         return null;
@@ -18,18 +17,36 @@ export function useMySpaces() {
     refetchOnWindowFocus: false,
     retry: false,
   });
-    return data;
+  return data;
 }
 
-
-export function useSingleSpace(id:string) {
+export function useSingleSpace(id: string) {
   const data = useQuery({
-    queryKey: ['space', id],
+    queryKey: ["space", id],
     queryFn: async () => {
       return fetchSpace(id);
     },
     refetchOnWindowFocus: false,
     retry: false,
   });
-    return data;
+  return data;
+}
+
+export function useAllSpaces(params: {
+  category?: string[];
+  country?: string;
+  city?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  minRating?: string;
+}) {
+  const data = useQuery({
+    queryKey: ["allspaces", {...params}],
+    queryFn: async () => {
+      return allSpaces(params);
+    },
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  return data;
 }

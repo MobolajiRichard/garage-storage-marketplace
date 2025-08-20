@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { AuthService } from 'src/auth/auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -83,11 +87,37 @@ export class SpacesService {
   }
 
   async leaveReview(data: CreateSpaceReviewDto) {
-    return await this.prisma.spaceReview.create({
+    await this.prisma.spaceReview.create({
       data: {
         ...data,
       },
     });
+
+    const space = await this.prisma.space.findUnique({
+      where: { id: data.spaceId },
+      select: { rating: true, ratingCount: true },
+    });
+
+    if (!space) {
+      throw new NotFoundException();
+    }
+
+    //calculate new average rating
+    const newCount = space.ratingCount + 1;
+    const oldTotal = (space.rating ?? 0) * space.ratingCount;
+    const newTotal = oldTotal + data.rating;
+    const newRating = Number((newTotal / newCount).toFixed(2));
+
+    //update space with new ratings
+    await this.prisma.space.update({
+      where: { id: data.spaceId },
+      data: {
+        rating: newRating,
+        ratingCount: newCount,
+      },
+    });
+
+    return { message: 'Review submitted successfully' };
   }
 
   async bookSpace(data: CreateBookingDto) {
@@ -106,7 +136,7 @@ export class SpacesService {
 
         host: {
           select: {
-            userId:true,
+            userId: true,
           },
         },
       },
@@ -118,10 +148,67 @@ export class SpacesService {
         title: 'Space Booked',
         content: `${bookedSpace?.title} has been booked for ${data.startAt} to ${data.endAt}`,
         type: 'PAYMENT',
-        userId: bookedSpace?.host.userId!
+        userId: bookedSpace?.host.userId!,
       },
     });
 
     return booking;
+  }
+
+  async allSpaces(query: {
+    category?: string[];
+    country?: string;
+    city?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    minRating?: string;
+  }) {
+   const filters: any = {};
+
+
+  //category 
+  if (query.category && query.category.length > 0) {
+    filters.categories = { has: query.category };
+  }
+
+  //country
+  if (query.country) {
+    filters.Address = {
+      ...(filters.Address || {}),
+      country: { equals: query.country, mode: "insensitive" },
+    };
+  }
+
+  //city
+  if (query.city) {
+    filters.Address = {
+      ...(filters.Address || {}),
+      city: { equals: query.city, mode: "insensitive" },
+    };
+  }
+
+  //filter price
+  if (query.minPrice && !isNaN(parseFloat(query.minPrice))) {
+    filters.price = { ...(filters.price || {}), gte: parseFloat(query.minPrice) };
+  }
+
+  if (query.maxPrice && !isNaN(parseFloat(query.maxPrice))) {
+    filters.price = { ...(filters.price || {}), lte: parseFloat(query.maxPrice) };
+  }
+
+  //ratings
+  if (query.minRating && !isNaN(parseFloat(query.minRating))) {
+    filters.rating = { gte: parseFloat(query.minRating) };
+  }
+
+   console.log({query, filters})
+
+  return this.prisma.space.findMany({
+    where: filters,
+    include: {
+      Address: true,
+      host: true,
+    },
+  });
   }
 }

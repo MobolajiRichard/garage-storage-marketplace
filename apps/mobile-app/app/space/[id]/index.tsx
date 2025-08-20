@@ -12,6 +12,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Pressable,
@@ -21,13 +22,12 @@ import {
 } from "react-native";
 import { twMerge } from "tailwind-merge";
 
-
 const SpaceDetails = () => {
   const params = useLocalSearchParams();
   const { id } = params as { id: string };
 
   const [activeTab, setActiveTab] = useState("overview");
-  const { data } = useSingleSpace(id);
+  const { data, isLoading } = useSingleSpace(id);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -46,6 +46,11 @@ const SpaceDetails = () => {
   return (
     <Container className="p-0 relative" fullScreen>
       <View className="h-[45vh] bg-primary/20 relative">
+        {isLoading && (
+          <View className="w-full h-full items-center justify-center">
+            <ActivityIndicator color={"white"} size={"large"} />
+          </View>
+        )}
         {!!data?.images?.length && (
           <FlatList
             data={data?.images}
@@ -106,7 +111,7 @@ const SpaceDetails = () => {
           </Text>
         </View>
         {activeTab === "overview" && <SpaceOverview data={data!} />}
-        {activeTab === "reviews" && <SpaceReviews  data={data!} />}
+        {activeTab === "reviews" && <SpaceReviews data={data!} />}
       </View>
     </Container>
   );

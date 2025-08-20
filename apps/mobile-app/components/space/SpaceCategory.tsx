@@ -19,7 +19,6 @@ const SpaceCategory = ({
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
 }) => {
   const selectCategory = (id: string) => {
-    console.log({ id });
     const isSelected = selectedCategories.find((i) => i === id);
     setSelectedCategories((prev) =>
       isSelected ? prev?.filter((p) => p !== id) : [...prev, id]

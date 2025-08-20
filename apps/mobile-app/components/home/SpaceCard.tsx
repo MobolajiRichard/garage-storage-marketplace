@@ -1,15 +1,19 @@
 import { IMAGES } from "@/assets/images";
-import React from "react";
+import React, { FC } from "react";
 import { ImageBackground, Pressable, Text, View, Image } from "react-native";
 import BlackVeil from "../BlackVeil";
 import { AntDesign } from "@expo/vector-icons";
+import { SpaceProps } from "@/types";
+import { getCurrencySymbol } from "@/utils/price";
+import Skeleton from "../Skeleton";
+import { router } from "expo-router";
 
-const SpaceCard = () => {
+const SpaceCard: FC<SpaceProps> = (props) => {
   return (
-    <View className=" rounded-[15px] w-[150px]">
+    <Pressable onPress={() => router.push(`/space/${props.id}`)} className=" rounded-[15px] w-[150px]">
       <View className="relative">
         <Image
-          source={IMAGES.householdGarage}
+          source={{ uri: props?.images?.[0] }}
           className=""
           style={{
             width: 150,
@@ -23,17 +27,28 @@ const SpaceCard = () => {
         </Pressable>
       </View>
       <View className="mt-2 px-1">
-        <Text className="text-[12px] font-semibold">Room In London</Text>
+        <Text numberOfLines={1} className="text-[12px] font-semibold">
+          {props?.title}
+        </Text>
         <View className="flex-row items-center justify-between">
-            <Text className="text-[11px] mt-1">$40/hr</Text>
-            <View className="flex-row gap-1 items-center">
-                <AntDesign name="star" size={10} color="black" />
-                <Text className="text-[11px] mt-1">4.89</Text>
-            </View>
+          <Text className="text-[11px] mt-1">
+            {getCurrencySymbol(props?.currency)}
+            {props?.price}/hr
+          </Text>
+          <View className="flex-row gap-1 items-center">
+            <AntDesign name="star" size={10} color="black" />
+            <Text className="text-[11px] ">
+              {props?.rating ? props?.rating : 1}/5
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
+};
+
+export const HomeSpaceCardSkeleton = () => {
+  return <Skeleton className="w-[150px] h-[150px] rounded-[15px]" pulse />;
 };
 
 export default SpaceCard;
