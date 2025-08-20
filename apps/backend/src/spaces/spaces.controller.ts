@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -12,7 +13,6 @@ import { SpacesService } from './spaces.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateBookingDto,
-  CreateSpaceDto,
   CreateSpaceReviewDto,
 } from './spaces.dto';
 
@@ -21,8 +21,8 @@ export class SpacesController {
   constructor(private readonly spacesService: SpacesService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  createSpace(@Body() dto: CreateSpaceDto) {
+  // @UseGuards(AuthGuard)
+  createSpace(@Body() dto: any) {
     return this.spacesService.createSpace(dto);
   }
 
@@ -63,5 +63,11 @@ export class SpacesController {
   @UseGuards(AuthGuard)
   fetchSpace(@Param('id') id: string) {
     return this.spacesService.fetchSpace(id);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  deleteSpace(@Param('id') id: string) {
+    return this.spacesService.deleteSpace(id);
   }
 }

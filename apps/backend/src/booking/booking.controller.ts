@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Request, UseGuards } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 
@@ -10,5 +10,11 @@ export class BookingController {
   @UseGuards(AuthGuard)
   fetchMySpace(@Request() req) {
     return this.bookingService.myBookings(req['x-session-id']);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  cancelBooking(@Param('id') id: string) {
+    return this.bookingService.cancelBooking(id);
   }
 }

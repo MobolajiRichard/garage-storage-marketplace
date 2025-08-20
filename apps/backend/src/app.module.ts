@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { FileModule } from './file/file.module';
 import { SpacesModule } from './spaces/spaces.module';
 import { BookingModule } from './booking/booking.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BookingModule } from './booking/booking.module';
     FileModule,
     SpacesModule,
     BookingModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

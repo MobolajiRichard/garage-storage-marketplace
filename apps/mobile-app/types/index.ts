@@ -24,17 +24,17 @@ export type Address = {
 };
 
 export type Booking = {
-    id?:string
+  id?: string;
   spaceId: string;
   customerId: string;
   hostId: string;
   endAt: Date;
   status?: string;
-  startAt:Date;
+  startAt: Date;
   closed?: boolean;
   price?: number;
-  currency?:string
-  space?:SpaceProps
+  currency?: string;
+  space?: SpaceProps;
 };
 
 export type Review = {
@@ -45,7 +45,7 @@ export type Review = {
     name: string;
   };
   rating: number;
-  createdAt?:string
+  createdAt?: string;
 };
 
 export type SpaceProps = {
@@ -65,3 +65,17 @@ export type SpaceProps = {
   reviews: Review[];
   host: HostProfileProps;
 };
+
+
+export type NotificationProps = {
+  id?: string;
+  userId?: string;
+  type?: "SYSTEM" | "CHAT" | "PAYMENT"
+  title?: string;
+  content?: string;
+  isRead?: boolean;
+  data?: any;
+  createdAt?: Date;
+};
+
+

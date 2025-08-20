@@ -3,38 +3,25 @@ import { AuthService } from 'src/auth/auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class BookingService {
+export class NotificationService {
   constructor(
     private prisma: PrismaService,
     private authService: AuthService,
   ) {}
 
-  async myBookings(sessionId: string) {
+  async getMyNotifications(sessionId: string) {
     if (!sessionId) {
       throw new UnauthorizedException();
     }
     const session = await this.authService.getSession(sessionId);
 
-    const spaces = await this.prisma.booking.findMany({
-      where: {
-        hostId: session?.hostId,
-      },
-      include: {
-        space: {
-          include: {
-            Address: true,
-          },
-        },
-      },
-    });
+    if (!session) {
+      throw new UnauthorizedException();
+    }
 
-    return spaces;
-  }
-
-  async cancelBooking(id: string) {
-    return await this.prisma.booking.delete({
+    return await this.prisma.notification.findMany({
       where: {
-        id,
+        userId: session.userId,
       },
     });
   }

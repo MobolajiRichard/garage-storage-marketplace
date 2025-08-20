@@ -63,7 +63,7 @@ const SpaceResultCard = ({
         <FontAwesome name="star-o" size={24} color="white" />
         <View className="flex-row items-center gap-2">
           <Text className="text-white font-semibold text-[20px]">
-            {rating ? rating : 0}/5 ({ratingCount})
+            {rating ? rating : 0}/5
           </Text>
         </View>
       </View>

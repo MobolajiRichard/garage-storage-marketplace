@@ -193,7 +193,6 @@ export const imageToBase64 = async (image: string) => {
  * @returns 
  */
 export const processImages = async (images: string[]) => {
-    console.log({images})
   try {
     return await Promise.all(
       images.map(async uri => {

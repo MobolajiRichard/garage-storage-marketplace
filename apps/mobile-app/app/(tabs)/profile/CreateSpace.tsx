@@ -6,7 +6,6 @@ import {
   SpaceCategory,
   SpaceImages,
 } from "@/components";
-import ScreenHeader from "@/components/profile/ScreenHeader";
 import SpaceInfo from "@/components/space/SpaceInfo";
 import StepsProgressBar from "@/components/StepProgressBar";
 import { useUser } from "@/hooks/useUser";
@@ -84,7 +83,6 @@ const CreateSpace = () => {
           categories: selectedCategories,
         };
 
-        console.log({body})
         await createSpace(body);
         queryClient.invalidateQueries({ queryKey: ["mySpaces"] });
         router.push({

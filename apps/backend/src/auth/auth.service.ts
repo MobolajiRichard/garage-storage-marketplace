@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { randomUUID } from 'crypto';
@@ -69,7 +70,6 @@ export class AuthService {
     accountType: string;
   }) {
     const user = await this.findByEmail(email);
-    console.log({user})
 
     if (user) {
       throw new ConflictException('Email already exists');
@@ -91,6 +91,18 @@ export class AuthService {
         },
       });
     }
+
+    //send welcome notification
+    await this.prisma.notification.create({
+      data: {
+        title: 'Welcome to Garage Space',
+        content: `Find the perfect place to store your car, bike, or household items with ease. 
+            Garage Space connects you to secure, affordable, and convenient storage options 
+          around the world`,
+        type: 'SYSTEM',
+        userId: newUser.id,
+      },
+    });
 
     return await this.createSession(newUser.id);
   }
@@ -134,7 +146,7 @@ export class AuthService {
           select: {
             id: true,
             isActive: true,
-            hostProfile:true
+            hostProfile: true,
           },
         },
       },
@@ -152,7 +164,54 @@ export class AuthService {
     return {
       sessionId: session.id,
       userId: session.user.id,
-      hostId: session.user.hostProfile?.id
+      hostId: session.user.hostProfile?.id,
     };
+  }
+
+  async changePassword(
+    sessionId: string,
+    {
+      oldPassword,
+      newPassword,
+    }: {
+      oldPassword: string;
+      newPassword: string;
+    },
+  ) {
+    if (!sessionId) {
+      throw new UnauthorizedException();
+    }
+
+    const session = await this.getSession(sessionId);
+
+    if (!session) {
+      throw new UnauthorizedException();
+    }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: session.userId,
+      },
+      select: {
+        password: true,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    const isPasswordValid = await compare(oldPassword, user.password || '');
+
+    if (!isPasswordValid) {
+      throw new ConflictException();
+    }
+
+    await this.prisma.user.update({
+      where: {
+        id: session.userId,
+      },
+      data: {
+        password: hashSync(newPassword, SALT_ROUNDS),
+      },
+    });
   }
 }

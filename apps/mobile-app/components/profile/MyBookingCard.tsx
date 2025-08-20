@@ -1,6 +1,6 @@
 import { SHADOW_STYLE } from "@/constants/Colors";
 import React, { FC } from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import {
   DropdownMenuContent,
   DropdownMenu,
@@ -20,6 +20,10 @@ import { getCurrencySymbol } from "@/utils/price";
 import Skeleton from "../Skeleton";
 import { router } from "expo-router";
 import { formatDateTime } from "@/utils/date";
+import { Image } from "expo-image";
+import { cancelBooking } from "@/queries";
+import Toast from "react-native-toast-message";
+import { queryClient } from "@/app/_layout";
 
 const MyBookingCard: FC<Booking> = ({
   price,
@@ -27,9 +31,24 @@ const MyBookingCard: FC<Booking> = ({
   space,
   endAt,
   startAt,
-
   id,
 }) => {
+  const onDelete = async () => {
+    try {
+      await cancelBooking(id!);
+      queryClient.invalidateQueries({ queryKey: ["myBookings"] });
+      Toast.show({
+        type: "success",
+        text1: "Booking Cancelled",
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.show({
+        type: "error",
+        text1: "Please Try Again!",
+      });
+    }
+  };
   return (
     <View className="mt-6">
       <View
@@ -39,6 +58,11 @@ const MyBookingCard: FC<Booking> = ({
         <View className="flex-row flex-1 gap-4 items-stretch">
           {!!space?.images?.length ? (
             <Image
+              style={{
+                borderRadius: 15,
+                height: 100,
+                width: 100,
+              }}
               source={{
                 uri: space?.images?.[0],
               }}
@@ -64,14 +88,18 @@ const MyBookingCard: FC<Booking> = ({
                   <FontAwesome name="calendar" size={16} color="black" />
                   <Text className="font-medium">From</Text>
                 </View>
-                <Text className="mt-1">{formatDateTime(startAt?.toString())}</Text>
+                <Text className="mt-1">
+                  {formatDateTime(startAt?.toString())}
+                </Text>
               </View>
               <View className="mt-4">
                 <View className="flex-row items-center gap-1">
                   <FontAwesome name="calendar" size={16} color="black" />
                   <Text className="font-medium">To</Text>
                 </View>
-                <Text className="mt-1">{formatDateTime(endAt?.toString())}</Text>
+                <Text className="mt-1">
+                  {formatDateTime(endAt?.toString())}
+                </Text>
               </View>
             </View>
           </View>
@@ -82,7 +110,10 @@ const MyBookingCard: FC<Booking> = ({
               <Entypo name="dots-three-vertical" size={24} color="black" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="flex-row items-center gap-2  !px-3 !py-3">
+              <DropdownMenuItem
+                onPress={onDelete}
+                className="flex-row items-center gap-2  !px-3 !py-3"
+              >
                 <MaterialCommunityIcons
                   name="delete-outline"
                   size={20}
@@ -110,10 +141,10 @@ export const BookingCardSkeleton = () => {
           <View>
             <Skeleton className="h-[10px] w-[100px] rounded-[15px] mt-2" />
             <Skeleton className="h-[10px] w-[50px]  mt-4" />
-          <View>
-            <Skeleton className="h-[10px] w-[100px] rounded-[15px] mt-2" />
-            <Skeleton className="h-[10px] w-[50px]  mt-4" />
-          </View>
+            <View>
+              <Skeleton className="h-[10px] w-[100px] rounded-[15px] mt-2" />
+              <Skeleton className="h-[10px] w-[50px]  mt-4" />
+            </View>
           </View>
         </View>
         <Skeleton className="h-[50px] w-[10px]" />

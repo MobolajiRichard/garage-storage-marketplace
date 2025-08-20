@@ -7,7 +7,6 @@ import { FlatList, Text, View } from "react-native";
 
 const MyBookings = () => {
   const { data, isLoading } = useMyBookings();
-  console.log({data})
   return (
     <Container>
       <ScreenHeader title="My Bookings" />

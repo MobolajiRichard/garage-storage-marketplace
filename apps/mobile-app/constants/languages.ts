@@ -20,10 +20,6 @@ export const LANGUAGES = [
     code: 'ru',
   },
   {
-    name: 'Українська',
-    code: 'uk',
-  },
-  {
     name: 'Deutsch',
     code: 'de',
   },

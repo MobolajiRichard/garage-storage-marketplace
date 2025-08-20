@@ -5,7 +5,6 @@ import React, { FC } from "react";
 import { Text, View } from "react-native";
 
 const SpaceReviewCard: FC<Review> = (props) => {
-    console.log({props})
   return (
     <View className="border rounded-[15px] p-6 border-gray-300 flex-row gap-4 w-full">
       <View className="bg-primary/50 w-[50px] h-[50px] rounded-full items-center justify-center">

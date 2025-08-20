@@ -4,10 +4,11 @@ import { Text, View } from "react-native";
 
 export default function HomeScreen() {
   return (
-    <Container >
-    <View className="bg-red-300 flex- 1 items-center justify-center">
-      <Text>chats</Text>
-    </View>
+    <Container className="items-center ">
+      <Text className="text-[18px] font-medium text-center mt-[10vh]">
+        You currently have no active chats
+      </Text>
+      <Text className="mt-2 text-[14px]">Your chats will appear here</Text>
     </Container>
   );
 }

@@ -6,9 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, SignupDto } from './auth.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,5 +30,18 @@ export class AuthController {
   @Post('check-email')
   checkEmail(@Body() { email }: { email: string }) {
     return this.authService.checkEmail(email);
+  }
+
+  @Post('change-password')
+  @UseGuards(AuthGuard)
+  async deleteMe(
+    @Request() req,
+    @Body()
+    data: {
+      oldPassword: string;
+      newPassword: string;
+    },
+  ) {
+    return this.authService.changePassword(req['x-session-id'], data);
   }
 }

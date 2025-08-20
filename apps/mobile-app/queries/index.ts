@@ -63,6 +63,17 @@ export async function loginUser(data: LoginInput) {
   });
 }
 
+export async function changePassword(data: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  return sendRequest({
+    url: API_ENDPOINTS.AUTH.CHANGE_PASSWORD,
+    method: "POST",
+    data
+  });
+}
+
 //USER
 export async function getUser(): Promise<UserProps> {
   return sendRequest({
@@ -82,6 +93,14 @@ export async function updateUserInformation(data: {
     data,
   });
 }
+
+export async function deleteAccount() {
+  return sendRequest({
+    url: API_ENDPOINTS.USER.BASE,
+    method: "DELETE",
+  });
+}
+
 
 //FILE
 export async function uploadFile(data: unknown): Promise<string> {
@@ -151,10 +170,32 @@ export async function allSpaces(params: {
   });
 }
 
+export async function deleteSpace(id: string) {
+  return sendRequest({
+    url: API_ENDPOINTS.SPACE.CREATE + `/${id}`,
+    method: "DELETE",
+  });
+}
+
 //BOOKINGS
 export async function fetchMyBookings(): Promise<Booking[]> {
   return sendRequest({
     url: API_ENDPOINTS.BOOKINGS.ME,
+    method: "GET",
+  });
+}
+
+export async function cancelBooking(id: string) {
+  return sendRequest({
+    url: API_ENDPOINTS.BOOKINGS.BASE + `/${id}`,
+    method: "DELETE",
+  });
+}
+
+//NOTIFICATIONS
+export async function getMyNotifications(): Promise<Booking[]> {
+  return sendRequest({
+    url: API_ENDPOINTS.NOTIFICATIONS.ME,
     method: "GET",
   });
 }

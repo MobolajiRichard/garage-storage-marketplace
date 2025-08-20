@@ -28,4 +28,10 @@ export class UserController {
   async updateMe(@Body() dto: UpdateProfileDto, @Request() req) {
     return this.userService.updateProfile(req['x-session-id'], dto);
   }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  async deleteMe(@Request() req) {
+    return this.userService.deleteAccount(req['x-session-id']);
+  }
 }

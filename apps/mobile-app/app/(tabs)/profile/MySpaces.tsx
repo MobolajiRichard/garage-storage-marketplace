@@ -5,7 +5,7 @@ import { useMySpaces } from "@/hooks/useSpaces";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable,  View } from "react-native";
 
 const MySpaces = () => {
   const { data, isLoading } = useMySpaces();

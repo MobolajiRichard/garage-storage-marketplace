@@ -3,9 +3,11 @@ export const API_ENDPOINTS = {
     SIGNUP: "/auth/signup",
     CHECK_EMAIL: "/auth/check-email",
     LOGIN: "/auth/login",
+    CHANGE_PASSWORD:"/auth/change-password"
   },
   USER: {
     ME: "/user/me",
+    BASE: "/user",
   },
   FILE: {
     UPLOAD: "/file/upload",
@@ -13,10 +15,14 @@ export const API_ENDPOINTS = {
   SPACE: {
     CREATE: "/spaces",
     ME: "/spaces/me",
-    REVIEW:"/spaces/:id/review",
-    BOOK:"/spaces/:id/book",
+    REVIEW: "/spaces/:id/review",
+    BOOK: "/spaces/:id/book",
   },
-  BOOKINGS:{
-    ME:"/booking/me"
-  }
+  BOOKINGS: {
+    BASE: "/booking",
+    ME: "/booking/me",
+  },
+  NOTIFICATIONS: {
+    ME: "/notification/me",
+  },
 };

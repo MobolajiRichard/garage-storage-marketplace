@@ -3,14 +3,9 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { AuthService } from 'src/auth/auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  CreateBookingDto,
-  CreateSpaceDto,
-  CreateSpaceReviewDto,
-} from './spaces.dto';
+import { CreateBookingDto, CreateSpaceReviewDto } from './spaces.dto';
 
 @Injectable()
 export class SpacesService {
@@ -19,7 +14,7 @@ export class SpacesService {
     private authService: AuthService,
   ) {}
 
-  async createSpace(data: CreateSpaceDto) {
+  async createSpace(data: any) {
     const { address, ...rest } = data;
 
     //create space
@@ -52,6 +47,9 @@ export class SpacesService {
       },
       include: {
         Address: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
@@ -146,7 +144,7 @@ export class SpacesService {
     await this.prisma.notification.create({
       data: {
         title: 'Space Booked',
-        content: `${bookedSpace?.title} has been booked for ${data.startAt} to ${data.endAt}`,
+        content: `${bookedSpace?.title} has been booked for ${data.startAt?.split('T')} to ${data.endAt}`,
         type: 'PAYMENT',
         userId: bookedSpace?.host.userId!,
       },
@@ -163,52 +161,64 @@ export class SpacesService {
     maxPrice?: string;
     minRating?: string;
   }) {
-   const filters: any = {};
+    const filters: any = {};
 
+    //category
+    if (query.category && query.category.length > 0) {
+      filters.categories = { has: query.category };
+    }
 
-  //category 
-  if (query.category && query.category.length > 0) {
-    filters.categories = { has: query.category };
+    //country
+    if (query.country) {
+      filters.Address = {
+        ...(filters.Address || {}),
+        country: { equals: query.country, mode: 'insensitive' },
+      };
+    }
+
+    //city
+    if (query.city) {
+      filters.Address = {
+        ...(filters.Address || {}),
+        city: { equals: query.city, mode: 'insensitive' },
+      };
+    }
+
+    //filter price
+    if (query.minPrice && !isNaN(parseFloat(query.minPrice))) {
+      filters.price = {
+        ...(filters.price || {}),
+        gte: parseFloat(query.minPrice),
+      };
+    }
+
+    if (query.maxPrice && !isNaN(parseFloat(query.maxPrice))) {
+      filters.price = {
+        ...(filters.price || {}),
+        lte: parseFloat(query.maxPrice),
+      };
+    }
+
+    //ratings
+    if (query.minRating && !isNaN(parseFloat(query.minRating))) {
+      filters.rating = { gte: parseFloat(query.minRating) };
+    }
+
+    return this.prisma.space.findMany({
+      where: filters,
+      include: {
+        Address: true,
+        host: true,
+      },
+    });
   }
 
-  //country
-  if (query.country) {
-    filters.Address = {
-      ...(filters.Address || {}),
-      country: { equals: query.country, mode: "insensitive" },
-    };
-  }
-
-  //city
-  if (query.city) {
-    filters.Address = {
-      ...(filters.Address || {}),
-      city: { equals: query.city, mode: "insensitive" },
-    };
-  }
-
-  //filter price
-  if (query.minPrice && !isNaN(parseFloat(query.minPrice))) {
-    filters.price = { ...(filters.price || {}), gte: parseFloat(query.minPrice) };
-  }
-
-  if (query.maxPrice && !isNaN(parseFloat(query.maxPrice))) {
-    filters.price = { ...(filters.price || {}), lte: parseFloat(query.maxPrice) };
-  }
-
-  //ratings
-  if (query.minRating && !isNaN(parseFloat(query.minRating))) {
-    filters.rating = { gte: parseFloat(query.minRating) };
-  }
-
-   console.log({query, filters})
-
-  return this.prisma.space.findMany({
-    where: filters,
-    include: {
-      Address: true,
-      host: true,
-    },
-  });
+  async deleteSpace(spaceId: string) {
+    await this.prisma.address.deleteMany({
+      where: { spaceId },
+    });
+    return await this.prisma.space.delete({
+      where: { id: spaceId },
+    });
   }
 }

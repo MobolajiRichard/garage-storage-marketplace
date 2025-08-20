@@ -1,11 +1,11 @@
-import { fetchMyBookings } from "@/queries";
+import { getMyNotifications } from "@/queries";
 import { useQuery } from "@tanstack/react-query";
 
-export function useMyBookings() {
+export function useMyNotification() {
   const data = useQuery({
-    queryKey: ['myBookings'],
+    queryKey: ['myNotifications'],
     queryFn: async () => {
-      return fetchMyBookings();
+      return getMyNotifications();
     },
     refetchOnWindowFocus: false,
     retry: false,

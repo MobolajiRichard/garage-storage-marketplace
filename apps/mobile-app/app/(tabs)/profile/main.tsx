@@ -1,10 +1,9 @@
 import { Container, AuthForm, ModalSlide, Button } from "@/components";
-import ScreenHeader from "@/components/profile/ScreenHeader";
 import SettingsMenu from "@/components/profile/SettingsMenu";
 import { SHADOW_STYLE } from "@/constants/Colors";
 import { useUser } from "@/hooks/useUser";
 import React, { useState } from "react";
-import { Text, View, Modal, Image } from "react-native";
+import { Text, View,  Image } from "react-native";
 
 const Profile = () => {
   const [openAuthModal, setOpenAuthModal] = useState(false);

@@ -18,6 +18,9 @@ import { twMerge } from "tailwind-merge";
 import { getCurrencySymbol } from "@/utils/price";
 import Skeleton from "../Skeleton";
 import { router } from "expo-router";
+import { queryClient } from "@/app/_layout";
+import Toast from "react-native-toast-message";
+import { deleteSpace } from "@/queries";
 
 const MySpaceCard: FC<SpaceProps> = ({
   images,
@@ -28,6 +31,23 @@ const MySpaceCard: FC<SpaceProps> = ({
   isBooked,
   id
 }) => {
+
+  const onDelete = async () => {
+      try {
+        await deleteSpace(id!);
+        queryClient.invalidateQueries({ queryKey: ["mySpaces"] });
+        Toast.show({
+          type: "success",
+          text1: "Space Deleted",
+        });
+      } catch (error) {
+        console.log(error);
+        Toast.show({
+          type: "error",
+          text1: "Please Try Again!",
+        });
+      }
+    };
   return (
     <View className="mt-6">
       <View
@@ -83,7 +103,7 @@ const MySpaceCard: FC<SpaceProps> = ({
                 <Feather name="edit" size={20} color="black" />
                 <Text className="font-medium">Edit</Text>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex-row items-center gap-2  !px-3 !py-3">
+              <DropdownMenuItem onPress={onDelete} className="flex-row items-center gap-2  !px-3 !py-3">
                 <MaterialCommunityIcons
                   name="delete-outline"
                   size={20}

@@ -1,12 +1,13 @@
 import { IMAGES } from "@/assets/images";
 import React, { FC } from "react";
-import { ImageBackground, Pressable, Text, View, Image } from "react-native";
+import { ImageBackground, Pressable, Text, View, } from "react-native";
 import BlackVeil from "../BlackVeil";
 import { AntDesign } from "@expo/vector-icons";
 import { SpaceProps } from "@/types";
 import { getCurrencySymbol } from "@/utils/price";
 import Skeleton from "../Skeleton";
 import { router } from "expo-router";
+import { Image } from "expo-image";
 
 const SpaceCard: FC<SpaceProps> = (props) => {
   return (

@@ -1,6 +1,5 @@
 import { queryClient } from "@/app/_layout";
 import { Button, Container, Input } from "@/components";
-import LanguageSelects from "@/components/profile/LanguagesSelects";
 import ScreenHeader from "@/components/profile/ScreenHeader";
 import { useUser } from "@/hooks/useUser";
 import { updateUserInformation, uploadFile } from "@/queries";

@@ -7,6 +7,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 import { AuthService } from 'src/auth/auth.service';
 import { UpdateProfileDto } from './users.dto';
+import { compare, hashSync } from 'bcrypt';
+
 
 @Injectable()
 export class UserService {
@@ -66,4 +68,20 @@ export class UserService {
       },
     });
   }
+
+  async deleteAccount(sessionId: string) {
+    if (!sessionId) {
+      throw new UnauthorizedException();
+    }
+
+    const session = await this.authService.getSession(sessionId);
+
+    if (!session) {
+      throw new UnauthorizedException();
+    }
+    return await this.prisma.user.delete({
+      where: { id: session.userId },
+    });
+  }
+  
 }

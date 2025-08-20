@@ -9,12 +9,13 @@ import {
   FontAwesome,
   FontAwesome5,
 } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
-  Image,
   Pressable,
   Text,
   View,
@@ -45,7 +46,7 @@ const SpaceDetails = () => {
 
   return (
     <Container className="p-0 relative" fullScreen>
-      <View className="h-[45vh] bg-primary/20 relative">
+      <View className="h-[45vh] rounded-bl-[15px] rounded-br-[15px] bg-primary/20 relative">
         {isLoading && (
           <View className="w-full h-full items-center justify-center">
             <ActivityIndicator color={"white"} size={"large"} />
@@ -59,6 +60,12 @@ const SpaceDetails = () => {
             pagingEnabled
             renderItem={({ item }) => (
               <Image
+                style={{
+                    width:Dimensions.get('window').width,
+                    height:Dimensions.get('window').height * 0.45,
+                    borderBottomLeftRadius:15,
+                    borderBottomRightRadius:15
+                }}
                 className=" w-[100vw] h-[45vh] rounded-bl-[15px] rounded-br-[15px]"
                 source={{
                   uri: item,
